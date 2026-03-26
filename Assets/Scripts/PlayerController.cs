@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float forwardSpeed = 3f;
     [SerializeField] private float moveDistance = 2f;
     [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float jumpForce = 4f;
+    [SerializeField] private float jumpForce = 7f;
 
     private float currentLane = 0f;
 
@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // MoveForward();
+        MoveForward();
         Jump();
     }
 
@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
             playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
+            isOnGround = false;
         }
     }
 
@@ -106,6 +107,11 @@ public class PlayerController : MonoBehaviour
         if(collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
+        }
+        
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log(message : "Hit");
         }
     }
 }

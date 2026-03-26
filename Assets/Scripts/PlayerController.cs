@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveDistance = 2f;
     [SerializeField] private float moveSpeed = 3f;
 
+    private float currentLane = 0f;
+
     private Rigidbody playerRb;
 
     private Vector3 startPosition;
@@ -36,25 +38,36 @@ public class PlayerController : MonoBehaviour
     }
     private void MoveForward()
     {
-        playerRb.linearVelocity = new Vector3( playerRb.linearVelocity.x , playerRb.linearVelocity.y , forwardSpeed );
+        playerRb.linearVelocity = new Vector3(playerRb.linearVelocity.x,playerRb.linearVelocity.y,forwardSpeed);
     }
     private void ChangeLane()
     {
         if(Input.GetKeyDown(KeyCode.A) && !isMoving)
         {
-            startPosition = transform.position;
-            endPosition = startPosition + (Vector3.left * moveDistance);
+            if(currentLane > -1)
+            {
+                currentLane--;
 
-            elapsedTime = 0f;
-            isMoving = true;
+                startPosition = transform.position;
+                endPosition = startPosition + (Vector3.left * moveDistance);
+
+                elapsedTime = 0f;
+                isMoving = true;
+            }
+            
         }
         else if(Input.GetKeyDown(KeyCode.D) && !isMoving)
         {
-            startPosition = transform.position;
-            endPosition = startPosition + (Vector3.right * moveDistance);
+            if (currentLane < 1)
+            {
+                currentLane++;
 
-            elapsedTime = 0;
-            isMoving = true;
+                startPosition = transform.position;
+                endPosition = startPosition + (Vector3.right * moveDistance);
+
+                elapsedTime = 0;
+                isMoving = true;
+            }
         }
     }
 
@@ -72,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
         if(t >= 1f)
         {
-            transform.position = endPosition;
+            playerRb.MovePosition(endPosition);
             isMoving = false;   
         }
     }
